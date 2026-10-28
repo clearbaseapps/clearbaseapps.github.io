@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Odoo Doctor: a health check for your Odoo database (17, 18, 19, 20)</title>
+<meta name="description" content="74 checks for security, accounting, data quality and system health in Odoo 17, 18, 19 and 20. A score, a ranked list of problems and the steps to fix each one. A free Lite version is available.">
+<link rel="canonical" href="https://clearbaseapps.github.io/">
+<link rel="icon" href="img/icon.png">
+<link rel="stylesheet" href="style.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Odoo Doctor: a health check for your Odoo database (17, 18, 19, 20)">
+<meta property="og:description" content="74 checks for security, accounting, data quality and system health in Odoo 17, 18, 19 and 20. A score, a ranked list of problems and the steps to fix each one. A free Lite version is available.">
+<meta property="og:url" content="https://clearbaseapps.github.io/">
+<meta property="og:image" content="https://clearbaseapps.github.io/img/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Odoo Doctor",
+ "applicationCategory": "BusinessApplication", "operatingSystem": "Odoo 17, 18, 19, 20",
+ "description": "74 health checks for an Odoo database.",
+ "offers": {"@type": "Offer", "price": "26.00", "priceCurrency": "USD"},
+ "author": {"@type": "Organization", "name": "Clearbase"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="img/icon.png" alt="" width="32" height="32"><span>Odoo Doctor</span></a>
+    <nav aria-label="Main"><a href="checks.html">All 74 checks</a><a href="extending.html">Add your own checks</a><a href="index.html#get">Get it</a></nav>
+  </div>
+</header>
+<main id="main">
+
+<section class="hero">
+  <div class="wrap">
+    <h1>A health check for your Odoo database</h1>
+    <p class="lead">74 checks for security, accounting, data quality and system health. One score out of 100, a list of
+    problems ranked by severity, and the steps to fix each one. It runs inside Odoo 17, 18, 19 and 20, and nothing
+    leaves your server.</p>
+    <p class="actions"><a class="btn" href="#get">Get Odoo Doctor, $26</a>
+    <a class="btn ghost" href="#lite">Start with the free Lite</a></p>
+    <img class="shot" src="img/main_screenshot.png" alt="Odoo Doctor health report: a score, a grade, scores per area and the list of issues" width="1440" height="900">
+    <p class="small center">Sample data: a demo company called Acme Trading.</p>
+  </div>
+</section>
+
+<section class="wrap block">
+  <h2>What it finds</h2>
+  <p>The kind of problems that nobody notices until an audit, an upgrade or an outage: an administrator without two-factor
+  login, a database manager open to the internet, unreconciled bank lines, invoices with gaps in their numbering,
+  records whose files are missing, scheduled actions that stopped running. <a href="checks.html">See all 74 checks</a>.</p>
+  <div class="grid"><div class="card"><h3>Security</h3><p class="count">11 checks</p><ul><li>Database manager exposed</li><li>Administrators without two-factor login</li><li>Archived employees who can still log in</li></ul></div><div class="card"><h3>System & performance</h3><p class="count">32 checks</p><ul><li>Database connections nearly full</li><li>Installed modules missing from the server</li><li>Low disk space for uploaded files</li></ul></div><div class="card"><h3>Accounting</h3><p class="count">15 checks</p><ul><li>Unbalanced journal entries</li><li>Possible duplicate vendor bills</li></ul></div><div class="card"><h3>Data quality</h3><p class="count">10 checks</p><ul><li>Negative stock</li><li>Serial numbers in more than one place</li></ul></div><div class="card"><h3>Sales & purchase</h3><p class="count">6 checks</p><ul><li>Online payments waiting for confirmation</li><li>Payment providers in test mode</li><li>Purchases waiting for a vendor bill</li></ul></div></div>
+</section>
+
+<section class="wrap block">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><strong>Install and scan.</strong> A scan only reads. It usually takes a few seconds, and runs
+    again every week on its own.</li>
+    <li><strong>Read the score.</strong> You get a grade, a score per area and a trend, so you can see whether things get
+    better or worse.</li>
+    <li><strong>Work down the list.</strong> Each finding says what is wrong, why it matters, how to fix it, and opens the
+    affected records. Safe fixes are one click. Findings you accept can be ignored with a reason and an end date.</li>
+    <li><strong>Keep it that way.</strong> Get an email when the score drops, print a PDF report on your letterhead, and
+    add checks of your own for your own rules.</li>
+  </ol>
+  <img class="shot" src="img/issue_detail.png" alt="One finding opened: what is wrong, why it matters, how to fix it, and a Fix button" width="1440" height="900" loading="lazy">
+</section>
+
+<section class="wrap block">
+  <h2>Who it is for</h2>
+  <div class="grid">
+    <div class="card"><h3>Administrators</h3><p>You inherited a database or run it alone. You want to know what to look at first
+    without reading every setting.</p></div>
+    <div class="card"><h3>Odoo partners and freelancers</h3><p>Audit a client's database before an upgrade or a hand-over, and
+    hand them a PDF. It lists the custom modules, the custom fields and the Python stored in the database that an upgrade has to deal with.</p></div>
+    <div class="card"><h3>Developers</h3><p>Add your own checks to the same scan, score and report with a few lines of Python.
+    The <a href="extending.html">interface is documented</a> and kept stable.</p></div>
+  </div>
+</section>
+
+<section class="wrap block" id="upgrade">
+  <h2>Before an upgrade</h2>
+  <p>An upgrade is easier when you know what is in the database that Odoo did not ship. Odoo Doctor lists it, and checks
+  the things that make an upgrade fail:</p>
+  <ul>
+    <li>modules that are not made by Odoo, and installed modules whose code is missing from the server;</li>
+    <li>modules left half-installed or half-upgraded;</li>
+    <li>fields and models created in the interface, and Python code that lives only in the database;</li>
+    <li>unbalanced journal entries, and whether your Odoo version is still in standard support.</li>
+  </ul>
+  <p class="note">It looks at the database, not at the code of your custom modules. To find deprecated code in your own
+  modules, use Odoo's upgrade tooling; the two complement each other.</p>
+</section>
+
+<section class="wrap block" id="lite">
+  <h2>Free Lite, or the full Odoo Doctor</h2>
+  <p>Odoo Doctor Lite is free, with no time limit and no account. It runs the 21 most important checks. The full Odoo
+  Doctor runs all 74, and builds on Lite: your scans, settings and ignored issues stay as they are.</p>
+  <div class="scroll"><table>
+    <thead><tr><th></th><th>Lite (free)</th><th>Odoo Doctor</th></tr></thead>
+    <tbody>
+      <tr><td>Health score, grade, area scores and trend</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Weekly scan, history, ignore with a reason</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Built-in checks</td><td>21</td><td>74</td></tr>
+      <tr><td>One-click fixes</td><td>-</td><td>Yes</td></tr>
+      <tr><td>Step-by-step how to fix on every finding</td><td>-</td><td>Yes</td></tr>
+      <tr><td>PDF report on your letterhead</td><td>-</td><td>Yes</td></tr>
+      <tr><td>Email when something gets worse</td><td>-</td><td>Yes</td></tr>
+      <tr><td>Your own checks, without code</td><td>-</td><td>Yes</td></tr>
+      <tr><td>Turn checks off, change severity and limits</td><td>-</td><td>Yes</td></tr>
+    </tbody>
+  </table></div>
+  <div class="two">
+    <img class="shot" src="img/pdf_report.png" alt="The PDF report" width="720" loading="lazy">
+    <img class="shot" src="img/email_summary.png" alt="The email summary" width="720" loading="lazy">
+  </div>
+</section>
+
+<section class="wrap block" id="get">
+  <h2>Get it</h2>
+  <p>Both apps are on the Odoo Apps Store. Pick your Odoo version.</p>
+  <div class="get">
+    <div class="card"><h3>Odoo Doctor</h3><p class="count">$26 &middot; all 74 checks</p>
+      <p class="buttons"><a class="btn small" href="https://apps.odoo.com/apps/modules/17.0/odoo_doctor">Odoo 17</a><a class="btn small" href="https://apps.odoo.com/apps/modules/18.0/odoo_doctor">Odoo 18</a><a class="btn small" href="https://apps.odoo.com/apps/modules/19.0/odoo_doctor">Odoo 19</a><a class="btn small" href="https://apps.odoo.com/apps/modules/20.0/odoo_doctor">Odoo 20</a></p></div>
+    <div class="card"><h3>Odoo Doctor Lite</h3><p class="count">Free &middot; 21 checks</p>
+      <p class="buttons"><a class="btn small" href="https://apps.odoo.com/apps/modules/17.0/odoo_doctor_lite">Odoo 17</a><a class="btn small" href="https://apps.odoo.com/apps/modules/18.0/odoo_doctor_lite">Odoo 18</a><a class="btn small" href="https://apps.odoo.com/apps/modules/19.0/odoo_doctor_lite">Odoo 19</a><a class="btn small" href="https://apps.odoo.com/apps/modules/20.0/odoo_doctor_lite">Odoo 20</a></p></div>
+  </div>
+  <p class="note"><strong>Where it runs.</strong> On-premise and Odoo.sh. It is not available on Odoo Online (odoo.com
+  databases), because Odoo does not allow third-party apps there.</p>
+</section>
+
+<section class="wrap block">
+  <h2>Questions</h2>
+  <h3>Does it change my data?</h3>
+  <p>A scan only reads. Nothing changes until you click a Fix button, and only the full Odoo Doctor has them.</p>
+  <h3>Does anything leave my server?</h3>
+  <p>No. There is no external service, no account and no tracking. The email summary goes out through your own outgoing
+  mail server.</p>
+  <h3>Who can see it?</h3>
+  <p>Only users with Settings access. A Settings administrator gets the same scan whether or not they have access to
+  sales, accounting or stock.</p>
+  <h3>How is the score calculated?</h3>
+  <p>You start at 100. Each open issue subtracts points by severity: critical 20, high 10, medium 4, low 1. Issues you
+  accept stop counting until their end date.</p>
+  <h3>Which versions are supported?</h3>
+  <p>Odoo 17, 18, 19 and 20. Each version has its own automated test suite.</p>
+  <h3>Can I trust the findings?</h3>
+  <p>Every check has automated tests on all four Odoo versions, but a check can still disagree with how your company
+  works. Ignore a finding with a reason and it stays quiet. If a check is wrong for you, tell us at
+  <a href="mailto:clearbaseapps@gmail.com">clearbaseapps@gmail.com</a> and we fix it.</p>
+</section>
+
+</main>
+<footer>
+  <div class="wrap">
+    <p>Odoo Doctor and Odoo Doctor Lite are made by Clearbase. Questions or a check you would like added:
+    <a href="mailto:clearbaseapps@gmail.com">clearbaseapps@gmail.com</a>.</p>
+    <p class="small">Licence: Odoo Proprietary License v1.0 (OPL-1). Odoo is a trademark of Odoo S.A.; this is an independent
+    app and is not made or endorsed by Odoo S.A.</p>
+  </div>
+</footer>
+</body>
+</html>

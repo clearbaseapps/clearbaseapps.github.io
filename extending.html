@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add your own checks to Odoo Doctor: the module interface</title>
+<meta name="description" content="How an Odoo module adds checks to Odoo Doctor, and the names it can rely on.">
+<link rel="canonical" href="https://clearbaseapps.github.io/extending.html">
+<link rel="icon" href="img/icon.png">
+<link rel="stylesheet" href="style.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Add your own checks to Odoo Doctor: the module interface">
+<meta property="og:description" content="How an Odoo module adds checks to Odoo Doctor, and the names it can rely on.">
+<meta property="og:url" content="https://clearbaseapps.github.io/extending.html">
+<meta property="og:image" content="https://clearbaseapps.github.io/img/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><img src="img/icon.png" alt="" width="32" height="32"><span>Odoo Doctor</span></a>
+    <nav aria-label="Main"><a href="checks.html">All 74 checks</a><a href="extending.html" aria-current="page">Add your own checks</a><a href="index.html#get">Get it</a></nav>
+  </div>
+</header>
+<main id="main">
+<div class="wrap block prose">
+<h1>Adding your own checks to Odoo Doctor</h1>
+<p>Any Odoo module can add checks to Odoo Doctor. They are scanned, scored, ignored, switched off and shown with the others, and they get a settings record (severity, limit) like every built-in check.</p>
+<p>This page lists what a module may rely on. It is a public interface: <strong>these names change only after a deprecation period, and are never removed in a single release.</strong> A change is announced in the release notes at least one release before it takes effect, and the old name keeps working until then. Anything not listed here is internal and may change in any release.</p>
+<p><code>odoo_doctor/tests/test_extension.py</code> is the executable version of this page: it adds a check the documented way and fails when something here stops working.</p>
+<h2>Depend on the module</h2>
+<pre><code># __manifest__.py
+&#x27;depends&#x27;: [&#x27;odoo_doctor&#x27;],</code></pre>
+<p>Use <code>odoo_doctor_lite</code> instead when you only need the scan engine. The <code>howto</code> and <code>doc_url</code> keys below belong to Odoo Doctor (the paid version); with Lite alone they are ignored.</p>
+<h2>Add a check</h2>
+<p>Extend <code>doctor.scan._get_checks()</code>: append your definitions to <code>super()</code> and write the method each one names.</p>
+<pre><code>from odoo import _, api, fields, models
+
+
+class DoctorScan(models.Model):
+    _inherit = &#x27;doctor.scan&#x27;
+
+    @api.model
+    def _get_checks(self):
+        return super()._get_checks() + [{
+            &#x27;code&#x27;: &#x27;myapp_orphan_orders&#x27;,
+            &#x27;name&#x27;: _(&#x27;Orders without a customer&#x27;),
+            &#x27;category&#x27;: &#x27;business&#x27;,
+            &#x27;severity&#x27;: &#x27;medium&#x27;,
+            &#x27;method&#x27;: &#x27;_check_orphan_orders&#x27;,
+            &#x27;description&#x27;: _(&#x27;An order without a customer cannot be invoiced.&#x27;),
+            &#x27;requires&#x27;: &#x27;myapp.order&#x27;,
+            &#x27;threshold&#x27;: (30, _(&#x27;Days since the order&#x27;)),
+            &#x27;howto&#x27;: _(&#x27;Open each order and choose its customer, or cancel it.&#x27;),
+            &#x27;doc_url&#x27;: &#x27;https://example.com/docs/orphan-orders&#x27;,
+        }]
+
+    def _check_orphan_orders(self):
+        days = self._threshold(&#x27;myapp_orphan_orders&#x27;)
+        since = fields.Datetime.subtract(fields.Datetime.now(), days=days)
+        orders = self.env[&#x27;myapp.order&#x27;].search([(&#x27;partner_id&#x27;, &#x27;=&#x27;, False), (&#x27;create_date&#x27;, &#x27;&lt;&#x27;, since)])
+        if not orders:
+            return None
+        return self._issue(_(&#x27;%s orders have no customer.&#x27;, len(orders)), &#x27;myapp.order&#x27;, orders.ids)</code></pre>
+<h2>The check definition</h2>
+<div class="scroll"><table><thead><tr><th>Key</th><th>Required</th><th>Meaning</th></tr></thead><tbody><tr><td><code>code</code></td><td>yes</td><td>Unique and <strong>stable</strong>: settings, ignore reasons and the history are kept under this code. Prefix it with your module.</td></tr><tr><td><code>name</code></td><td>yes</td><td>Short title shown in the lists.</td></tr><tr><td><code>category</code></td><td>yes</td><td>One of <code>security</code>, <code>system</code>, <code>accounting</code>, <code>data</code>, <code>business</code>.</td></tr><tr><td><code>severity</code></td><td>yes</td><td><code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code> or <code>info</code>. <code>info</code> never lowers the score.</td></tr><tr><td><code>method</code></td><td>yes</td><td>Name of the method of <code>doctor.scan</code> that runs the check.</td></tr><tr><td><code>description</code></td><td>yes</td><td>Why it matters, shown on the issue.</td></tr><tr><td><code>requires</code></td><td>no</td><td>A model name. When it is not installed the check is skipped with a clear reason.</td></tr><tr><td><code>threshold</code></td><td>no</td><td><code>(default value, label)</code>: a limit the user can change in the check settings. Read it with <code>self._threshold(code)</code>.</td></tr><tr><td><code>howto</code></td><td>no</td><td>Steps to fix a finding (Odoo Doctor). Kept as you give it.</td></tr><tr><td><code>doc_url</code></td><td>no</td><td>Link to a documentation page, shown with the steps (Odoo Doctor). Kept as you give it.</td></tr><tr><td><code>fix</code></td><td>no</td><td>Name of a <code>_fix_*</code> method that takes the <code>doctor.result</code> record, for a Fix button.</td></tr><tr><td><code>fix_label</code></td><td>no</td><td>Label of that button.</td></tr></tbody></table></div>
+<p>Odoo Doctor fills in <code>howto</code> and <code>doc_url</code> only for its own checks; a check of yours without them still runs.</p>
+<h2>The check method</h2>
+<ul><li>Return a falsy value (<code>None</code>) when the check passes.</li><li>Return <code>self._issue(message, res_model=None, ids=None, count=None, severity=None)</code> when it finds something. <code>ids</code> are the affected records of <code>res_model</code> (the user can open them); <code>count</code> replaces <code>len(ids)</code> when you list fewer records than you found; <code>severity</code> overrides the one of the definition for this finding.</li><li>Return <code>self._skip(reason)</code> when the check cannot say anything here (a setting does not apply, an app is missing).</li><li>Raise nothing on purpose: an exception stops only your check, which then shows as &quot;The check could not run&quot;.</li><li>It runs with <code>sudo()</code>, in its own savepoint. It sees every record whoever started the scan, exactly as the nightly scan does. It must only read.</li><li><code>self._threshold(&#x27;&lt;code&gt;&#x27;)</code> returns the limit set by the user, or the default of the definition.</li></ul>
+<h2>Stable names</h2>
+<ul><li>The definition keys above.</li><li>The methods <code>_get_checks()</code>, <code>_issue()</code>, <code>_skip()</code> and <code>_threshold()</code> of <code>doctor.scan</code>, with the arguments shown.</li><li>The category names <code>security</code>, <code>system</code>, <code>accounting</code>, <code>data</code> and <code>business</code>, and the severities <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code> and <code>info</code>.</li><li>The check codes of Odoo Doctor itself: a check moves between Odoo Doctor and Odoo Doctor Lite without changing its code, so settings and history carry over.</li></ul>
+<h2>Before you publish</h2>
+<p>Install your module with Odoo Doctor on a copy of your database and run a scan: a check that fails there shows as &quot;The check could not run&quot; with the reason.</p>
+</div>
+</main>
+<footer>
+  <div class="wrap">
+    <p>Odoo Doctor and Odoo Doctor Lite are made by Clearbase. Questions or a check you would like added:
+    <a href="mailto:clearbaseapps@gmail.com">clearbaseapps@gmail.com</a>.</p>
+    <p class="small">Licence: Odoo Proprietary License v1.0 (OPL-1). Odoo is a trademark of Odoo S.A.; this is an independent
+    app and is not made or endorsed by Odoo S.A.</p>
+  </div>
+</footer>
+</body>
+</html>
